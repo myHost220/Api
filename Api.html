@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+<button id="btn">add</button>
+<button id="btn2">remove</button>
+<script>
+    let btn = document.getElementById('btn');
+    let btn2 = document.getElementById('btn2');
+    let url = new URL('https://dummyjson.com/products');
+    url.searchParams.set('limit', 33);
+    fetch(url)
+        .then(res => res.json())
+        .then(({products}) => {
+            for (let product of products) {
+                let div = document.createElement('div');
+                let p1 = document.createElement('p');
+                p1.textContent = product.id;
+
+                let h2 = document.createElement('h2');
+                h2.textContent = product.title;
+
+                let img = document.createElement('img');
+                img.src = product.images;
+                img.style.cssText = 'width: 200px; height: 200px;';
+
+                let p2 = document.createElement('p');
+                p2.textContent = product.description;
+                p2.style.cssText = 'width: 500px;';
+
+                div.append(p1, h2, img, p2);
+                document.body.appendChild(div);
+            }
+        })
+
+        btn.onclick = () => {
+            fetch('https://dummyjson.com/products/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: 'BMW Pencile',
+                    /* other product data */
+                })
+            })
+                .then(res => res.json())
+                .then(console.log);
+        }
+        btn2.onclick = () => {
+            fetch('https://dummyjson.com/products/195', {
+                method: 'DELETE',
+            })
+                .then(res => res.json())
+                .then(console.log);
+        }
+</script>
+</body>
+</html>
